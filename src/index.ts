@@ -21,7 +21,20 @@ app.get("/", (req, res) => {
 
 app.get("/products", (req, res) => {
   res.json(products);
-  res.json;
+});
+
+app.get("/products/:id", (req, res) => {
+  console.log("req.params", req.params.id);
+
+  const { id } = req.params;
+
+  res.json(`ID is ${id}`);
+});
+
+app.get("/products/:productId/reviews/:reviewId", (req, res) => {
+  const { productId, reviewId } = req.params;
+
+  res.json(`productId is ${productId}, reviewId is ${reviewId}`);
 });
 
 app.listen(PORT, () => {
