@@ -20,6 +20,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/products", (req, res) => {
+  console.log(req.query);
+  const { maxPrice, category } = req.query;
+  console.log(maxPrice, category);
+
   res.json(products);
 });
 
