@@ -1,7 +1,9 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 interface Product {
   id: number;
@@ -17,19 +19,6 @@ const products: Product[] = [
 
 app.get("/products/:id", (req, res) => {
   const id = Number(req.params.id);
-
-  const product = products.find((product) => product.id === id);
-  console.log(product);
-
-  if (!product) {
-    return res.status(404).json({ error: "Product not found" });
-  }
-
-  res.json(product);
-});
-
-app.get("/products", (req, res) => {
-  const id = Number(req.query.id);
 
   const product = products.find((product) => product.id === id);
   console.log(product);
