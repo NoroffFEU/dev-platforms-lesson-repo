@@ -15,30 +15,30 @@ const products: Product[] = [
   { id: 3, name: "Keyboard", price: 80 },
 ];
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello" });
+app.get("/products/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const product = products.find((product) => product.id === id);
+  console.log(product);
+
+  if (!product) {
+    return res.status(404).json({ error: "Product not found" });
+  }
+
+  res.json(product);
 });
 
 app.get("/products", (req, res) => {
-  console.log(req.query);
-  const { maxPrice, category } = req.query;
-  console.log(maxPrice, category);
+  const id = Number(req.query.id);
 
-  res.json(products);
-});
+  const product = products.find((product) => product.id === id);
+  console.log(product);
 
-app.get("/products/:id", (req, res) => {
-  console.log("req.params", req.params.id);
+  if (!product) {
+    return res.status(404).json({ error: "Product not found" });
+  }
 
-  const { id } = req.params;
-
-  res.json(`ID is ${id}`);
-});
-
-app.get("/products/:productId/reviews/:reviewId", (req, res) => {
-  const { productId, reviewId } = req.params;
-
-  res.json(`productId is ${productId}, reviewId is ${reviewId}`);
+  res.json(product);
 });
 
 app.listen(PORT, () => {
