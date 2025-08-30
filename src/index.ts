@@ -1,22 +1,16 @@
-import express, { NextFunction } from "express";
+import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use((req, res, next: NextFunction) => {
-  console.log("Middleware here");
-  next();
-});
+// express.json();
 
-app.use((req, res, next) => {
-  console.log("Middleware two");
-  next();
-});
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  console.log("I am the route handler");
+app.post("/users", (req, res) => {
+  console.log(req.body);
 
   res.json({ message: "Hello" });
 });
