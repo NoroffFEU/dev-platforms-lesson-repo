@@ -1,17 +1,17 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// express.json();
-
 app.use(express.json());
 
-app.post("/users", (req, res) => {
-  console.log(req.body);
+app.use(cors({ origin: "http://127.0.0.1:5500" }));
 
+app.get("/", (req, res) => {
   res.json({ message: "Hello" });
 });
 
