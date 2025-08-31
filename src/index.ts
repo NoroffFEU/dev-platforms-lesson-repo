@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -10,28 +10,19 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  throw new Error("Custom message");
-  res.json({ message: "Home" });
-});
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Route not found",
-    message: `Cannot ${req.method} ${req.originalUrl}`,
-  });
-});
+const users: User[] = [
+  { id: 1672531200000, name: "John Doe", email: "john@example.com" },
+  { id: 1672531260000, name: "Jane Smith", email: "jane@example.com" },
+];
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log(err.message);
-
-  res.status(500).json({
-    error: "Internal server error",
-    message:
-      process.env.NODE_ENV === "development"
-        ? err.message
-        : "Something went wrong",
-  });
+app.get("/users", (req, res) => {
+  res.json(users);
 });
 
 app.listen(PORT, () => {
