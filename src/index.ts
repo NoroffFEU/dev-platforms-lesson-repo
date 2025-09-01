@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -21,11 +21,25 @@ const users: User[] = [
   { id: 1672531260000, name: "Jane Smith", email: "jane@example.com" },
 ];
 
+function checkAuth(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Missing auth" });
+  }
+
+  if (authHeader !== "Bearer secret123") {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  next();
+}
+
 app.get("/users", (req, res) => {
   res.json(users);
 });
 
-app.post("/users", (req, res) => {
+app.post("/users", checkAuth, (req, res) => {
   const { name, email } = req.body;
 
   if (!name || !email) {
