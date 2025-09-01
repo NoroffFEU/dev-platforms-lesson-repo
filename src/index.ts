@@ -54,6 +54,30 @@ app.post("/users", checkAuth, (req, res) => {
   res.status(201).json(user);
 });
 
+app.put("/users/:id", checkAuth, (req, res) => {
+  const userId = Number(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Id must be a number" });
+  }
+
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: "Bad data" });
+  }
+
+  const userIndex = users.findIndex((user) => user.id === userId);
+
+  if (userIndex === -1) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  users[userIndex] = { id: userId, name, email };
+
+  res.json(users[userIndex]);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
