@@ -25,6 +25,21 @@ app.get("/users", (req, res) => {
   res.json(users);
 });
 
+app.post("/users", (req, res) => {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: "Bad data" });
+  }
+
+  const id = Date.now();
+
+  const user: User = { id, name, email };
+  users.push(user);
+
+  res.status(201).json(user);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
