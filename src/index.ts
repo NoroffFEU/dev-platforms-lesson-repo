@@ -78,6 +78,38 @@ app.put("/users/:id", checkAuth, (req, res) => {
   res.json(users[userIndex]);
 });
 
+app.patch("/users/:id", checkAuth, (req, res) => {
+  const userId = Number(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Id must be a number" });
+  }
+
+  const updates = req.body;
+
+  if (!updates.name && !updates.email) {
+    return res
+      .status(400)
+      .json({ error: "At least one of name or email should exist" });
+  }
+
+  const userIndex = users.findIndex((user) => user.id === userId);
+
+  if (userIndex === -1) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  // const existingObject = {...users[userIndex]};
+  // //  { id: 1672531200000, name: "John Doe", email: "john@example.com" }
+  // const newProperties = { ...updates}
+  // // { name: "John Updated"};
+  // // { id: 1672531200000, name: "John Updated", email: "john@example.com" }
+
+  users[userIndex] = { ...users[userIndex], ...updates };
+
+  res.json(users[userIndex]);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
