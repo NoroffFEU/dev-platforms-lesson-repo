@@ -98,16 +98,27 @@ app.patch("/users/:id", checkAuth, (req, res) => {
   if (userIndex === -1) {
     return res.status(404).json({ error: "User not found" });
   }
-
-  // const existingObject = {...users[userIndex]};
-  // //  { id: 1672531200000, name: "John Doe", email: "john@example.com" }
-  // const newProperties = { ...updates}
-  // // { name: "John Updated"};
-  // // { id: 1672531200000, name: "John Updated", email: "john@example.com" }
-
   users[userIndex] = { ...users[userIndex], ...updates };
 
   res.json(users[userIndex]);
+});
+
+app.delete("/users/:id", checkAuth, (req, res) => {
+  const userId = Number(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Id must be a number" });
+  }
+
+  const userIndex = users.findIndex((user) => user.id === userId);
+
+  if (userIndex === -1) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  users.splice(userIndex, 1);
+
+  res.status(204).send();
 });
 
 app.listen(PORT, () => {
